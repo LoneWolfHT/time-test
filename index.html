@@ -1,7 +1,7 @@
 <head></head>
 <body>
-  <h2 id="date"></h2>
-  <p>test</p>
+	<input type="hidden" name="time">
+	<h2 id="date"></h2>
 </body>
 
 <script>
@@ -42,5 +42,14 @@
 		return time;
 	}
 
-	document.getElementById("date").innerHTML = convertTimestamp(1726336800);
+	let date = document.getElementsByName("time")[0];
+
+	if (date && !isNaN(date.value)) {
+		date = new Date(Number(date.value) * 1000);
+	}
+	else {
+		date = now();
+	}
+
+	document.getElementById("date").innerHTML = convertTimestamp(date);
 </script>
