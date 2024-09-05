@@ -1,20 +1,20 @@
 <head></head>
 <body>
 	<input type="hidden" name="time">
-	<h2 id="date"></h2>
+	<span id="date"></span>
 </body>
 
 <script>
 	const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 	const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 	
+	const now = new Date();
 	var day = days[ now.getDay() ];
 	var month = months[ now.getMonth() ];
 		
 	  // credit: https://gist.github.com/kmaida/6045266
-	function convertTimestamp(timestamp) {
-	  var d = new Date(timestamp * 1000),	// Convert the passed timestamp to milliseconds
-			yyyy = d.getFullYear(),
+	function convertTimestamp(d) {
+		let yyyy = d.getFullYear(),
 			mm = ('0' + (d.getMonth() + 1)).slice(-2),	// Months are zero based. Add leading 0.
 			dd = ('0' + d.getDate()).slice(-2),			// Add leading 0.
 			hh = d.getHours(),
@@ -41,15 +41,23 @@
 			
 		return time;
 	}
+	
+	// credit: https://stackoverflow.com/a/67221634/11433667
+	const params = new URLSearchParams(window.location.search); //parse params
+	let date = params.get("time"); //get time param
 
-	let date = document.getElementsByName("time")[0];
 
-	if (date && !isNaN(date.value)) {
-		date = new Date(Number(date.value) * 1000);
+	console.log(date);
+
+	if (date && !isNaN(date)) {
+		console.log("Using supplied date");
+		date = new Date(Number(date) * 1000); // Convert the timestamp to milliseconds
 	}
 	else {
-		date = now();
+		date = now;
 	}
 
-	document.getElementById("date").innerHTML = convertTimestamp(date);
+	console.log(date);
+
+	document.getElementById("date").innerHTML = (date === now ? "Current Time: <strong>" : "Unix Timestamp " + params.get("time") + " as date: <strong>") + convertTimestamp(date) + "</strong>";
 </script>
